@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 const font = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Harmony",
+  title: "Harmonic",
   description: "A Discord Clone",
   icons: {
     icon: '/logo.png'
