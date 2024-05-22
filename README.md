@@ -1,1 +1,1 @@
-discord
+Something that would look like discord with all its basic functionalities
