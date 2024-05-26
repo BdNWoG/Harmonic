@@ -2,7 +2,7 @@
 
 import qs from "query-string";
 import * as z from "zod";
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod"; 
 import { useForm } from "react-hook-form";
 
@@ -14,6 +14,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useModel } from "@/hooks/use-model-store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { ChannelType } from "@prisma/client";
+import { useEffect } from "react";
 
 const formSchema = z.object({
     name: z.string().min(1, { message: "Channel Name is Required!" }).refine(
@@ -23,11 +24,12 @@ const formSchema = z.object({
 });
 
 export const CreateChannelModel = () => {
-    const { isOpen, onClose, type } = useModel();
+    const { isOpen, onClose, type, data } = useModel();
     const router = useRouter(); 
     const params = useParams();
 
     const isModelOpen = isOpen && type === "createChannel";
+    const { channelType } = data;
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -36,9 +38,17 @@ export const CreateChannelModel = () => {
         shouldFocusError: true,
         defaultValues: {
             name: "",
-            type: ChannelType.TEXT,
+            type: channelType || ChannelType.TEXT,
         }
     });
+
+    useEffect(() => {
+        if (channelType) {
+            form.setValue("type", channelType);
+        } else {
+            form.setValue("type", ChannelType.TEXT);
+        }
+    }, [channelType, form]);
 
     const isLoading = form.formState.isSubmitting;
 
