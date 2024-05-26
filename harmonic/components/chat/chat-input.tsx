@@ -18,7 +18,7 @@ interface ChatInputProps {
 }
 
 const formSchema = z.object({
-    message: z.string().min(1)
+    content: z.string().min(1)
 });
 
 export const ChatInput = ({ 
@@ -27,7 +27,7 @@ export const ChatInput = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            message: "", //
+            content: "", 
         }
     })
 
@@ -35,7 +35,12 @@ export const ChatInput = ({
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
+            const url = qs.stringifyUrl({
+                url: apiUrl,
+                query, 
+            });
 
+            await axios.post(url, values);
         } catch (error) {
             console.log(error);
         }
@@ -44,7 +49,7 @@ export const ChatInput = ({
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField control={form.control} name="message"
+                <FormField control={form.control} name="content"
                 render={({ field }) => (
                     <FormItem>
                         <FormControl>
