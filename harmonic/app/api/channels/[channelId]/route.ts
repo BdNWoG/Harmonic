@@ -77,6 +77,10 @@ export async function PATCH (
             return new NextResponse("Invalid Channel", { status: 400 });
         }
 
+        if (name === "general") {
+            return new NextResponse("Invalid Channel Name", { status: 400 });
+        }
+
         const server = await db.server.update({
             where: {
                 id: serverId,
@@ -91,10 +95,16 @@ export async function PATCH (
             },
             data: {
                 channels: {
-                    delete: {
-                        id: params.channelId, 
-                        name: {
-                            not: "General"
+                    update: {
+                        where: {
+                            id: params.channelId,
+                            NOT: {
+                                name: "General"
+                            }
+                        },
+                        data: {
+                            name,
+                            type
                         }
                     }
                 }
@@ -103,7 +113,7 @@ export async function PATCH (
 
         return NextResponse.json(server);
     } catch (error) {
-        console.error("[CHANNEL_ID_DELETE]", error);
+        console.error("[CHANNEL_ID_PATCH]", error);
         return new NextResponse("Internal Error", { status: 500 });
     }
 }
