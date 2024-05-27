@@ -8,8 +8,10 @@ import qs from "query-string";
 
 import { Form, FormField, FormControl, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
-import { Plus, Smile } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useModel } from "@/hooks/use-model-store";
+import { EmojiPicker } from "../emoji-picker";
+import { useRouter } from "next/navigation";
 
 interface ChatInputProps {
     apiUrl: string, 
@@ -26,6 +28,7 @@ export const ChatInput = ({
     apiUrl, query, name, type 
 }: ChatInputProps & { type: "channel" | "message"}) => {
     const { onOpen } = useModel();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -44,6 +47,9 @@ export const ChatInput = ({
             });
 
             await axios.post(url, values);
+
+            form.reset();
+            router.refresh();
         } catch (error) {
             console.log(error);
         }
@@ -64,7 +70,7 @@ export const ChatInput = ({
                                 <Input disabled={isLoading} placeholder={`Message ${type === "message" ? name : "#" + name}`} {...field}
                                 className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"/>
                                 <div className="top-7 right-8 absolute">
-                                    <Smile/>
+                                    <EmojiPicker onChange={(emoji: string) => field.onChange(`${field.value}${emoji}`)}/>
                                 </div>
                             </div>
                         </FormControl>
