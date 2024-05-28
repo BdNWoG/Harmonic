@@ -54,6 +54,10 @@ export const ChatItem = ({
         } 
     });
 
+    const onSubmit = (values) => {
+        console.log(values);
+    }
+
     useEffect(() => {
         form.reset({ content: content });
     }, [content])
@@ -113,6 +117,24 @@ export const ChatItem = ({
                                 </span>
                             )}
                         </p>
+                    )}
+                    {!fileUrl && isEditing && (
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)}
+                            className="flex items-center w-full gap-x-2 pt-2">
+                                <FormField control={form.control} name="content"
+                                render={({ field }) => (
+                                    <FormItem className="flex-1">
+                                        <FormControl>
+                                            <div className="relative w-full">
+                                                <Input placeholder="Edit message" {...field}
+                                                className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"/>
+                                            </div>
+                                        </FormControl>
+                                    </FormItem>
+                                )}/>
+                            </form>
+                        </Form>
                     )}
                 </div>
             </div>
