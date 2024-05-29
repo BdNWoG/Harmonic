@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
 import { FileIcon, X } from "lucide-react";
 import { UploadDropzone } from "@/lib/uploadthing";
 import Image from "next/image";
 
 interface FileUploadProps {
-    onChange: (url?: String) => void;
-    value: String;
+    onChange: (url?: string) => void;
+    value: string;
     endpoint: "messageFile" | "serverImage"; 
 }
 
