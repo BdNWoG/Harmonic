@@ -54,7 +54,7 @@ export const ChatItem = ({
     const onMemberClick = () => {
         if (member.id === currentMember.id) {
             return;
-        }
+        } 
 
         router.push(`/servers/${params?.serverId}/messages/${member.id}`);
     }
@@ -97,7 +97,7 @@ export const ChatItem = ({
 
     useEffect(() => {
         form.reset({ content: content });
-    }, [content, form]) //updated
+    }, [content])
 
     const fileType = fileUrl?.split(".").pop();
 
